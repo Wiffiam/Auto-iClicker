@@ -12,6 +12,11 @@
         "matches": ["https://student.iclicker.com/*"],
         "js": ["content.js"]
       }
+    ],
+    "background": [
+      {
+        "service_worker": ["background.js"]
+      }
     ]
   }
   
