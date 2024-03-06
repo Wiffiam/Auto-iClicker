@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "name": "Auto iClicker",
+    "version": "1.0",
+    "description": "hee hee hee haw",
+    "permissions": ["activeTab", "scripting", "storage"],
+    "host_permissions": [
+      "https://student.iclicker.com/*"
+    ],
+    "content_scripts": [
+      {
+        "matches": ["https://student.iclicker.com/*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
+  
