@@ -51,6 +51,26 @@ function clickAnswerButton(choice) {
     return selectAllText && (selectAllText.innerText.includes("Select All Correct Answers Below") || selectAllText.innerText.includes("Answers Received"));
   }
 
+  function isMultipleChoice() {
+    const multipleChoiceHeader = document.querySelector('h2.banner-text');
+    console.log(multipleChoiceHeader);
+    return multipleChoiceHeader && (multipleChoiceHeader.innerText.includes("Multiple Choice"));
+  }
+
+  function enterMultipleChoice() {
+    // It's a regular multiple-choice question
+    chrome.storage.local.get(['questionIndex'], function(result) {
+      console.log("Multiple Choice Detected");
+      //textbox("MC Detected");
+      const answerChoices = ['a', 'b', 'c', 'd']; // LIST OF CHOICES, GOES IN ORDER, MUST BE LOWERCASE
+      let questionIndex = result.questionIndex || 0;
+      const selectedAnswer = answerChoices[questionIndex % answerChoices.length];
+      clickAnswerButton(selectedAnswer);
+      // Increment the index for the next question
+      chrome.storage.local.set({ 'questionIndex': questionIndex + 1 });
+    });
+  }
+
   function textbox(text) {
     // this function is dumb
     const body = document.querySelector('body');
@@ -87,19 +107,11 @@ function clickAnswerButton(choice) {
       //textbox("Select All Detected");
       console.log("Select All Detected");
       clickAnswerButton('A'); // ENTER THE SELECTION, IF YOU WANT TO MAKE MULTIPLE SELECTIONS ADD NEW LINES
+      clickAnswerButton('B');
       setTimeout(clickSubmitButton, 500); // Wait half a second before submitting
-    } else {
-      // It's a regular multiple-choice question
-      chrome.storage.local.get(['questionIndex'], function(result) {
-        console.log("Multiple Choice Detected");
-        //textbox("MC Detected");
-        const answerChoices = ['a', 'b', 'c', 'd']; // LIST OF CHOICES, GOES IN ORDER, MUST BE LOWERCASE
-        let questionIndex = result.questionIndex || 0;
-        const selectedAnswer = answerChoices[questionIndex % answerChoices.length];
-        clickAnswerButton(selectedAnswer);
-        // Increment the index for the next question
-        chrome.storage.local.set({ 'questionIndex': questionIndex + 1 });
-    });
+    } else if (isMultipleChoice()) {
+      console.log("Multiple Choice Detected");
+      enterMultipleChoice();
   }
 }
 
