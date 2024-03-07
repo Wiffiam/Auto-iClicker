@@ -16,6 +16,20 @@ function clickAnswerButton(choice) {
       setTimeout(clickSubmitButton, 500); // Wait half a second before submitting
     }
   }
+
+  function isShortAnswer() {
+    return !!document.querySelector('textarea#shortAnswerInput');
+  }
+
+  function enterShortAnswer() {
+    const shortAnswer = document.querySelector('textarea#shortAnswerInput');
+    if (shortAnswer) {
+      shortAnswer.value = 'TEST'; // REPLACE WITH DESIRED SHORT ANSWER
+      const event = new Event('input', { bubbles: true, cancelable: true });
+      shortAnswer.dispatchEvent(event);
+      setTimeout(clickSubmitButton, 500); // half second delay
+    }
+  }
   
   function isNumericQuestion() {
     // Check if the numeric input text area is present
@@ -63,8 +77,11 @@ function clickAnswerButton(choice) {
       console.log("Numeric Detected");
       //textbox("Numeric Detected");
       enterNumericAnswer();
-      setTimeout(clickSubmitButton, 500);
-      textbox("Test");
+      //textbox("Test");
+    } else if (isShortAnswer()) {
+      console.log("Short Answer Detected");
+      enterShortAnswer();
+      console.log("Submitted Short Answer");
     } else if (isSelectAllThatApplyQuestion()) {
       // It's a "select all that apply" question
       //textbox("Select All Detected");
