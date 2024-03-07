@@ -59,7 +59,7 @@ function clickAnswerButton(choice) {
 
   function isMultipleChoice() {
     const multipleChoiceHeader = document.querySelector('h2.banner-text');
-    console.log(multipleChoiceHeader);
+    console.log(multipleChoiceHeader && (multipleChoiceHeader.innerText.includes("Multiple Choice")));
     return multipleChoiceHeader && (multipleChoiceHeader.innerText.includes("Multiple Choice"));
   }
 
@@ -78,7 +78,13 @@ function clickAnswerButton(choice) {
   }
 
   function joinClassPopup() {
-    return (document.querySelector('#join-inner-container').style.display == 'block');
+    const innerContainer = document.querySelector('#join-inner-container');
+    if (innerContainer == null) {
+      return false;
+    } else if (innerContainer.style.display == 'block') {
+        return true;
+    }
+    return false;
   }
 
   function joinClass() {
@@ -118,7 +124,7 @@ function clickAnswerButton(choice) {
     } else if (isSelectAllThatApplyQuestion()) {
       console.log("Select All Detected");
       enterSelectAll();
-    } else if (isMultipleChoice()) {
+    } else {
       console.log("Multiple Choice Detected");
       enterMultipleChoice();
   }
