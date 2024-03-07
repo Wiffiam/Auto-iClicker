@@ -77,6 +77,17 @@ function clickAnswerButton(choice) {
     });
   }
 
+  function joinClassPopup() {
+    return (document.querySelector('#join-inner-container').style.display == 'block');
+  }
+
+  function joinClass() {
+    const joinButton = document.querySelector('#btnJoin');
+    if (joinButton && !joinButton.disabled) {
+      joinButton.click();
+    }
+  }
+
   function textbox(text) {
     // this function is dumb
     const body = document.querySelector('body');
@@ -119,8 +130,14 @@ const observer = new MutationObserver((mutations) => {
     if (mutation.addedNodes) {
       mutation.addedNodes.forEach((node) => {
         if (node.nodeType === Node.ELEMENT_NODE) {
+          console.log("new events detected");
           if (node.querySelector('.multiple-choice-buttons, .status-text-container, .numeric-answer-container')) {
             handleQuestion();
+          } else if (joinClassPopup()) {
+            console.log("JOINING CLASS");
+            joinClass();
+          } else {
+            console.log("OTHER EVENT");
           }
         }
       });
