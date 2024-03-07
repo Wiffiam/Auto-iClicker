@@ -51,6 +51,12 @@ function clickAnswerButton(choice) {
     return selectAllText && (selectAllText.innerText.includes("Select All Correct Answers Below") || selectAllText.innerText.includes("Answers Received"));
   }
 
+  function enterSelectAll() {
+    clickAnswerButton('A'); // ENTER THE SELECTION, IF YOU WANT TO MAKE MULTIPLE SELECTIONS ADD NEW LINES
+    clickAnswerButton('B');
+    setTimeout(clickSubmitButton, 500); // Wait half a second before submitting
+  }
+
   function isMultipleChoice() {
     const multipleChoiceHeader = document.querySelector('h2.banner-text');
     console.log(multipleChoiceHeader);
@@ -91,24 +97,16 @@ function clickAnswerButton(choice) {
   
   function handleQuestion() {
     console.log("Question Detected");
-    //textbox("Question Detected");
     if (isNumericQuestion()) {
-      // It's a numeric question
       console.log("Numeric Detected");
-      //textbox("Numeric Detected");
       enterNumericAnswer();
-      //textbox("Test");
     } else if (isShortAnswer()) {
       console.log("Short Answer Detected");
       enterShortAnswer();
       console.log("Submitted Short Answer");
     } else if (isSelectAllThatApplyQuestion()) {
-      // It's a "select all that apply" question
-      //textbox("Select All Detected");
       console.log("Select All Detected");
-      clickAnswerButton('A'); // ENTER THE SELECTION, IF YOU WANT TO MAKE MULTIPLE SELECTIONS ADD NEW LINES
-      clickAnswerButton('B');
-      setTimeout(clickSubmitButton, 500); // Wait half a second before submitting
+      enterSelectAll();
     } else if (isMultipleChoice()) {
       console.log("Multiple Choice Detected");
       enterMultipleChoice();
