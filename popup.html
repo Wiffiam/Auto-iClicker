@@ -1,14 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Auto iClicker</title>
-<style>
-  /* Add your CSS here */
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Answer Order</title>
+    <script src="popup.js"></script>
 </head>
 <body>
-  <h1>Auto iClicker</h1>
-  <button id="start">Start</button>
-  <script src="popup.js"></script>
+    <h1>Custom Answer Order</h1>
+    <p>Would you like to pick the answer order?</p>
+    <button id="pickOrderButton">Pick Answer Order</button>
+    <button id="randomOrderButton">Random Order</button>
+    <div id="orderInputSection" style="display: none;">
+        <p>Enter the desired order of answer choices:</p>
+        <input type="text" id="answerOrderInput" placeholder="e.g., adcba">
+        <button id="saveButton">Save</button>
+    </div>
 </body>
 </html>
