@@ -1,4 +1,4 @@
-  function clickAnswerButton(choice) {
+function clickAnswerButton(choice) {
     const answerButton = document.getElementById(`multiple-choice-${choice}`);
     if (answerButton && !answerButton.disabled) {
       answerButton.click();
