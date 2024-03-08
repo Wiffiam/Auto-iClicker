@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function saveAnswerOrder() {
-    const answerOrder = document.getElementById('answerOrderInput').value.toLowerCase().split('');
+    const answerOrder = document.getElementById('answerOrderInput').value.toLowerCase().split(',');
     chrome.storage.local.set({ 'answerOrder': answerOrder }, function() {
         console.log('Answer order saved successfully');
         alert('Answer order saved successfully');
