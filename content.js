@@ -82,7 +82,7 @@ function clickAnswerButton(choice) {
     if (innerContainer == null) {
       return false;
     } else if (innerContainer.style.display == 'block') {
-        return true;
+      return true;
     }
     return false;
   }
@@ -127,41 +127,41 @@ function clickAnswerButton(choice) {
     } else {
       console.log("Multiple Choice Detected");
       enterMultipleChoice();
-  }
-}
-
-// Use a MutationObserver to detect when new nodes are added to the DOM (new questions)
-const observer = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-    if (mutation.addedNodes) {
-      mutation.addedNodes.forEach((node) => {
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          console.log("new events detected");
-          if (node.querySelector('.multiple-choice-buttons, .status-text-container, .numeric-answer-container')) {
-            handleQuestion();
-          } else if (joinClassPopup()) {
-            console.log("JOINING CLASS");
-            joinClass();
-          } else {
-            console.log("OTHER EVENT");
-          }
-        }
-      });
     }
+  }
+
+  // Use a MutationObserver to detect when new nodes are added to the DOM (new questions)
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.addedNodes) {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            console.log("new events detected");
+            if (node.querySelector('.multiple-choice-buttons, .status-text-container, .numeric-answer-container')) {
+              handleQuestion();
+            } else if (joinClassPopup()) {
+              console.log("JOINING CLASS");
+              joinClass();
+            } else {
+              console.log("OTHER EVENT");
+            }
+          }
+        });
+      }
+    });
   });
-});
 
-observer.observe(document.body, {
-  childList: true,
-  subtree: true
-});
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
 
-// Function to periodically check for a new question every second
-function periodicCheck() {
-  handleQuestion();
-}
+  // Function to periodically check for a new question every second
+  function periodicCheck() {
+    handleQuestion();
+  }
 
-// Initial check on page load
-console.log("Test");
-//textbox("Initial Run");
-//handleQuestion();
+  // Initial check on page load
+  console.log("Test");
+  //textbox("Initial Run");
+  //handleQuestion();
