@@ -5,16 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Answer Order</title>
     <script src="popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="popup.css">
 </head>
 <body>
-    <h1>Custom Answer Order</h1>
-    <p>Would you like to pick the answer order?</p>
-    <button id="pickOrderButton">Pick Answer Order</button>
-    <button id="randomOrderButton">Random Order</button>
-    <div id="orderInputSection" style="display: none;">
-        <p>Enter the desired order of answer choices:</p>
-        <input type="text" id="answerOrderInput" placeholder="e.g., a,d,c,b,a">
-        <button id="saveButton">Save</button>
+    <div class="popup-container">
+        <h1>Custom Answer Order</h1>
+        <p>Would you like to pick the answer order?</p>
+        <button id="pickOrderButton">Pick Answer Order</button>
+        <button id="randomOrderButton">Random Order</button>
+        <div id="orderInputSection" class="order-input-section">
+            <p>Enter the desired order of answer choices:</p>
+            <input type="text" id="answerOrderInput" placeholder="e.g., a,d,c,b,a">
+            <button id="saveButton">Save</button>
+        </div>
     </div>
 </body>
 </html>
