@@ -5,7 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const powerSwitch = document.getElementById('powerSwitch');
 
     pickOrderButton.addEventListener('click', function() {
-        orderInputSection.style.display = 'block';
+        if (orderInputSection.style.display === 'block') {
+            orderInputSection.style.display = 'none';
+        } else {
+            orderInputSection.style.display = 'block';
+        }
     });
 
     randomOrderButton.addEventListener('click', function() {
@@ -47,17 +51,17 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function saveAnswerOrder() {
-    const answerOrderMC = document.getElementById('multipleChoiceOrderInput').value.toLowerCase().split(',');
-    const answerOrderNumeric = document.getElementById('numericOrderInput').value.toLowerCase().split(',');
-    const answerOrderShort = document.getElementById('shortAnswerInput').value.toLowerCase().split(',');
-    const answerOrderSelectAll = document.getElementById('selectAllAnswerInput').value.toLowerCase().split(',');
+    const answerOrderMC = getAnswerOrder('multipleChoiceOrderInput', ['a', 'b', 'c', 'd']);
+    const answerOrderNumeric = getAnswerOrder('numericOrderInput', [1, 2, 3]);
+    const answerOrderShort = getAnswerOrder('shortAnswerInput', ['hello', 'hola', 'bonjour']);
+    const answerOrderSelectAll = getAnswerOrder('selectAllAnswerInput', ['abc', 'ab', 'acd']);
     chrome.storage.local.set({ 'multipleChoiceOrder': answerOrderMC }, function() {
         console.log('Multiple choice order saved successfully');
     });
     chrome.storage.local.set({ 'questionIndexMC': 0 }, function() {
-        chrome.log('Question index reset');
+        console.log('Question index reset');
     });
-    chrome.storage.local.set({ 'numericOrder': answerOrderNumeric }, function() { 
+    chrome.storage.local.set({ 'numericOrder': answerOrderNumeric }, function() {
         console.log('Numeric order saved successfully');
     });
     chrome.storage.local.set({ 'questionIndexNumeric': 0 }, function() {
@@ -77,6 +81,15 @@ function saveAnswerOrder() {
     });
     // Assuming showNotification is a function you've defined to display notifications to the user
     showNotification('Answer order saved successfully', 'success');
+}
+
+function getAnswerOrder(inputId, defaultOrder) {
+    const inputValue = document.getElementById(inputId).value.toLowerCase().trim();
+    if (inputValue) {
+        return inputValue.split(',');
+    } else {
+        return defaultOrder;
+    }
 }
 
 function showNotification(message, type) {
