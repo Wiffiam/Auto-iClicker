@@ -4,7 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const orderInputSection = document.getElementById('orderInputSection');
 
     pickOrderButton.addEventListener('click', function() {
-        orderInputSection.style.display = 'block';
+        if (orderInputSection.style.display === 'block') {
+            orderInputSection.style.display = 'none';
+        } else {
+            orderInputSection.style.display = 'block';
+        }
     });
 
     randomOrderButton.addEventListener('click', function() {
