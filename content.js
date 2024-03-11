@@ -6,15 +6,21 @@ function clickAnswerButton(choice) {
   }
 
 function enterNumericAnswer() {
-  // The numeric input is a textarea with the ID "numericAnswer"
-  const numericInput = document.querySelector('textarea#numericAnswer');
-  if (numericInput) {
-    numericInput.value = '42'; // REPLACE WITH NUMERIC ANSWER
-    // Trigger the input event for AngularJS
-    const event = new Event('input', { bubbles: true, cancelable: true });
-    numericInput.dispatchEvent(event);
-    setTimeout(clickSubmitButton, 500); // Wait half a second before submitting
-  }
+  chrome.storage.local.get(['numericOrder', 'questionIndexNumeric'], function(result) {
+    console.log("Numeric Detected");
+    const numericOrder = result.numericOrder || [];
+    let questionIndexNumeric = result.questionIndexNumeric || 0;
+    // Use '0' as default if numericOrder is empty
+    const selectedAnswerNumeric = numericOrder.length > 0 ? numericOrder[questionIndexNumeric % numericOrder.length] : '0';
+    const numericInput = document.querySelector('textarea#numericAnswer');
+    if (numericInput) { 
+      numericInput.value = selectedAnswerNumeric;
+      const event = new Event('input', { bubbles: true, cancelable: true });
+      numericInput.dispatchEvent(event);
+      setTimeout(clickSubmitButton, 500);
+    }
+    chrome.storage.local.set({ 'questionIndexNumeric': questionIndexNumeric + 1 });
+  });
 }
 
 function isShortAnswer() {
@@ -22,13 +28,21 @@ function isShortAnswer() {
 }
 
 function enterShortAnswer() {
-  const shortAnswer = document.querySelector('textarea#shortAnswerInput');
-  if (shortAnswer) {
-    shortAnswer.value = 'TEST'; // REPLACE WITH DESIRED SHORT ANSWER
-    const event = new Event('input', { bubbles: true, cancelable: true });
-    shortAnswer.dispatchEvent(event);
-    setTimeout(clickSubmitButton, 500); // half second delay
-  }
+  chrome.storage.local.get(['shortAnswerOrder', 'questionIndexShort'], function(result) {
+    const shortAnswerOrder = result.shortAnswerOrder || [];
+    let questionIndexShort = result.questionIndexShort || 0;
+    // Use a single space ' ' as the default if shortAnswerOrder is empty
+    const selectedAnswerShort = shortAnswerOrder.length > 0 ? shortAnswerOrder[questionIndexShort % shortAnswerOrder.length] : ' ';
+    // Define shortAnswer by selecting the correct DOM element
+    const shortAnswer = document.querySelector('textarea#shortAnswerInput'); // Corrected to select a textarea
+    if (shortAnswer) { // Check if the textarea exists
+      shortAnswer.value = selectedAnswerShort;
+      const event = new Event('input', { bubbles: true, cancelable: true });
+      shortAnswer.dispatchEvent(event);
+      setTimeout(clickSubmitButton, 500); // Adjust clickSubmitButton function as necessary
+    }
+    chrome.storage.local.set({ 'questionIndexShort': questionIndexShort + 1 });
+  });
 }
 
 function isNumericQuestion() {
@@ -52,9 +66,18 @@ function isSelectAllThatApplyQuestion() {
 }
 
 function enterSelectAll() {
-  clickAnswerButton('A'); // ENTER THE SELECTION, IF YOU WANT TO MAKE MULTIPLE SELECTIONS ADD NEW LINES
-  clickAnswerButton('B');
-  setTimeout(clickSubmitButton, 500); // Wait half a second before submitting
+  chrome.storage.local.get(['selectAllOrder', 'questionIndexSelectAll'], function(result) {
+    const selectAllOrder = result.selectAllOrder || ['bc']; // Default order if none is set
+    let questionIndexSelectAll = result.questionIndexSelectAll || 0;
+    const selectedAnswerSelectAll = selectAllOrder[questionIndexSelectAll % selectAllOrder.length];
+    // Loop through each character in the selectedAnswerSelectAll string
+    for (let i = 0; i < selectedAnswerSelectAll.length; i++) {
+      const answerChar = selectedAnswerSelectAll.charAt(i);
+      clickAnswerButton(answerChar.toUpperCase()); // Call clickAnswerButton for each character
+    }
+    setTimeout(clickSubmitButton, 500); // Wait half a second before submitting to ensure all clicks are registered
+    chrome.storage.local.set({ 'questionIndexSelectAll': questionIndexSelectAll + 1 });
+  });
 }
 
 function isMultipleChoice() {
@@ -64,17 +87,16 @@ function isMultipleChoice() {
 }
 
 function enterMultipleChoice() {
-  chrome.storage.local.get(['questionIndex', 'answerOrder'], function(result) {
+  chrome.storage.local.get(['multipleChoiceOrder', 'questionIndexMC'], function(result) {
       console.log("Multiple Choice Detected");
-      const answerChoices = result.answerOrder || ['a', 'b', 'c', 'd']; // Default to ['a', 'b', 'c', 'd'] if no order is set
-      let questionIndex = result.questionIndex || 0;
-      const selectedAnswer = answerChoices[questionIndex % answerChoices.length];
-      clickAnswerButton(selectedAnswer);
+      const answerChoicesMC = result.multipleChoiceOrder || ['a', 'b', 'c', 'd']; // Use 'multipleChoiceOrder' to match popup.js
+      let questionIndexMC = result.questionIndexMC || 0;
+      const selectedAnswerMC = answerChoicesMC[questionIndexMC % answerChoicesMC.length];
+      clickAnswerButton(selectedAnswerMC);
       // Increment the index for the next question
-      chrome.storage.local.set({ 'questionIndex': questionIndex + 1 });
+      chrome.storage.local.set({ 'questionIndexMC': questionIndexMC + 1 });
   });
 }
-
 
 function joinClassPopup() {
   const innerContainer = document.querySelector('#join-inner-container');

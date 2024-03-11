@@ -20,11 +20,24 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function saveAnswerOrder() {
-    const answerOrder = document.getElementById('answerOrderInput').value.toLowerCase().split(',');
-    chrome.storage.local.set({ 'answerOrder': answerOrder }, function() {
-        console.log('Answer order saved successfully');
-        showNotification('Answer order saved successfully', 'success');
+    const answerOrderMC = document.getElementById('multipleChoiceOrderInput').value.toLowerCase().split(',');
+    const answerOrderNumeric = document.getElementById('numericOrderInput').value.toLowerCase().split(',');
+    const answerOrderShort = document.getElementById('shortAnswerInput').value.toLowerCase().split(',');
+    const answerOrderSelectAll = document.getElementById('selectAllAnswerInput').value.toLowerCase().split(',');
+    chrome.storage.local.set({ 'multipleChoiceOrder': answerOrderMC }, function() {
+        console.log('Multiple choice order saved successfully');
     });
+    chrome.storage.local.set({ 'numericOrder': answerOrderNumeric }, function() { 
+        console.log('Numeric order saved successfully');
+    });
+    chrome.storage.local.set({ 'shortAnswerOrder': answerOrderShort }, function() {
+        console.log('Short answer order saved successfully');
+    });
+    chrome.storage.local.set({ 'selectAllOrder': answerOrderSelectAll }, function() {
+        console.log('Select all order saved successfully');
+    });
+    // Assuming showNotification is a function you've defined to display notifications to the user
+    showNotification('Answer order saved successfully', 'success');
 }
 
 function showNotification(message, type) {
