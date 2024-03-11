@@ -1,5 +1,5 @@
 - Randomize answers
 - Improve UI for the app
 - Email notification OR app notification when a question is detected???
-- Manual answer mode???
 - Track number of correct/incorrect answers
+- Eliminate bugs when switching tabs and enabling/disabling the extension
