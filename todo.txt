@@ -2,5 +2,4 @@
 - Improve UI for the app
 - Email notification OR app notification when a question is detected???
 - Manual answer mode???
-- Have a start and stop button I guess
 - Track number of correct/incorrect answers
