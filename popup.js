@@ -27,14 +27,26 @@ function saveAnswerOrder() {
     chrome.storage.local.set({ 'multipleChoiceOrder': answerOrderMC }, function() {
         console.log('Multiple choice order saved successfully');
     });
+    chrome.storage.local.set({ 'questionIndexMC': 0 }, function() {
+        chrome.log('Question index reset');
+    });
     chrome.storage.local.set({ 'numericOrder': answerOrderNumeric }, function() { 
         console.log('Numeric order saved successfully');
+    });
+    chrome.storage.local.set({ 'questionIndexNumeric': 0 }, function() {
+        console.log('Question index reset');
     });
     chrome.storage.local.set({ 'shortAnswerOrder': answerOrderShort }, function() {
         console.log('Short answer order saved successfully');
     });
+    chrome.storage.local.set({ 'questionIndexShort': 0 }, function() {
+        console.log('Question index reset');
+    });
     chrome.storage.local.set({ 'selectAllOrder': answerOrderSelectAll }, function() {
         console.log('Select all order saved successfully');
+    });
+    chrome.storage.local.set({ 'questionIndexSelectAll': 0 }, function() {
+        console.log('Question index reset');
     });
     // Assuming showNotification is a function you've defined to display notifications to the user
     showNotification('Answer order saved successfully', 'success');
