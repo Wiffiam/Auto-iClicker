@@ -31,8 +31,8 @@ function enterShortAnswer() {
   chrome.storage.local.get(['shortAnswerOrder', 'questionIndexShort'], function(result) {
     const shortAnswerOrder = result.shortAnswerOrder || [];
     let questionIndexShort = result.questionIndexShort || 0;
-    // Use a single space ' ' as the default if shortAnswerOrder is empty
-    const selectedAnswerShort = shortAnswerOrder.length > 0 ? shortAnswerOrder[questionIndexShort % shortAnswerOrder.length] : ' ';
+    // Use '-' as the default if shortAnswerOrder is empty
+    const selectedAnswerShort = shortAnswerOrder.length > 0 ? shortAnswerOrder[questionIndexShort % shortAnswerOrder.length] : '-';
     // Define shortAnswer by selecting the correct DOM element
     const shortAnswer = document.querySelector('textarea#shortAnswerInput'); // Corrected to select a textarea
     if (shortAnswer) { // Check if the textarea exists
