@@ -1,6 +1,6 @@
 - Randomize answers
 - Improve UI for the app
-- Have a way to load in different answer types
 - Email notification OR app notification when a question is detected???
 - Manual answer mode???
 - Have a start and stop button I guess
+- Track number of correct/incorrect answers
