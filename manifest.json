@@ -3,6 +3,11 @@
   "name": "Auto iClicker",
   "version": "1.0",
   "description": "hee hee hee haw",
+  "icons": {
+    "16": "images/16x16_icon.png",
+    "48": "images/48x48_icon.png",
+    "128": "images/128x128_icon.png"
+  },
   "action": {
     "default_popup": "popup.html"
   },
