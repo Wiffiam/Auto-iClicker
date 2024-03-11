@@ -151,38 +151,69 @@ function handleQuestion() {
   }
 }
 
-// Use a MutationObserver to detect when new nodes are added to the DOM (new questions)
-const observer = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-    if (mutation.addedNodes) {
-      mutation.addedNodes.forEach((node) => {
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          console.log("new events detected");
-          if (node.querySelector('.multiple-choice-buttons, .status-text-container, .numeric-answer-container')) {
-            handleQuestion();
-          } else if (joinClassPopup()) {
-            console.log("JOINING CLASS");
-            joinClass();
-          } else {
-            console.log("OTHER EVENT");
-          }
-        }
-      });
-    }
-  });
-});
-
-observer.observe(document.body, {
-  childList: true,
-  subtree: true
-});
-
-// Function to periodically check for a new question every second
-function periodicCheck() {
+function initialRun() {
+  if (joinClassPopup()) {
+    joinClass();
+  }
   handleQuestion();
 }
 
-// Initial check on page load
-console.log("Test");
-//textbox("Initial Run");
-//handleQuestion();
+chrome.storage.local.get(['power'], function(result) {
+  const power = result.power;
+  if (power === 'on') {
+    initializeContentScript();
+  }
+});
+
+let observer; 
+
+function initializeContentScript() {
+  initialRun();
+  observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.addedNodes) {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            console.log("new events detected");
+            if (node.querySelector('.multiple-choice-buttons, .status-text-container, .numeric-answer-container')) {
+              handleQuestion();
+            } else if (joinClassPopup()) {
+              joinClass();
+            } else {
+              console.log("OTHER EVENT");
+            }
+          }
+        });
+      }
+    });
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+}
+
+function stopContentScript() {
+  if(observer) {
+    observer.disconnect(); 
+    console.log('Observer stopped');
+  } else {
+    console.log('No observer to disconnect');
+  }
+}
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.command === "start") {
+    initializeContentScript();
+    console.log("Content Script Started");
+  } else if (request.command === "stop") {
+    stopContentScript();
+    console.log("Content Script Stopped");
+  }
+});
+
+// Function to periodically check for a new question every second (for debug only)
+function periodicCheck() {
+  handleQuestion();
+}

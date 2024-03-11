@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const pickOrderButton = document.getElementById('pickOrderButton');
     const randomOrderButton = document.getElementById('randomOrderButton');
     const orderInputSection = document.getElementById('orderInputSection');
+    const powerSwitch = document.getElementById('powerSwitch');
 
     pickOrderButton.addEventListener('click', function() {
         orderInputSection.style.display = 'block';
@@ -14,6 +15,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         orderInputSection.style.display = 'none';
     });
+
+    chrome.storage.local.get(['power'], function(result) {
+        if (result.power === 'on') {
+            powerSwitch.checked = true;
+            powerButtonOn.style.display = 'block';
+            powerButtonOff.style.display = 'none';
+            initializeContentScript();
+        } else {
+            powerSwitch.checked = false;
+            powerButtonOn.style.display = 'none';
+            powerButtonOff.style.display = 'block';
+            stopContentScript();
+        }
+    });
+
+    powerSwitch.addEventListener('click', function() {
+        const powerState = powerSwitch.checked ? 'on' : 'off';
+        chrome.storage.local.set({ 'power': powerState }, function() {
+            console.log(`Extension ${powerState}`);
+            powerButtonOn.style.display = powerSwitch.checked ? 'block' : 'none';
+            powerButtonOff.style.display = powerSwitch.checked ? 'none' : 'block';
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {command: powerSwitch.checked ? "start" : "stop"});
+            });
+        });
+    });    
 
     const saveButton = document.getElementById('saveButton');
     saveButton.addEventListener('click', saveAnswerOrder);

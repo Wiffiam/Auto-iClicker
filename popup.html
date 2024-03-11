@@ -5,11 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Answer Order</title>
     <script src="popup.js"></script>
+    <script src="content.js"></script>
     <link rel="stylesheet" type="text/css" href="popup.css">
 </head>
 <body>
     <div class="popup-container">
         <h1>Custom Answer Order</h1>
+        <div id="powerButton" class="power-button">
+            <div id="powerButtonOn" class="power-button-on">
+                <h2>Enabled</h2>
+            </div>
+            <div id="powerButtonOff" class="power-button-off">
+                <h2>Disabled</h2>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="powerSwitch">
+                <span class="slider round"></span>
+            </label>
+        </div>
         <p>Would you like to pick the answer order?</p>
         <button id="pickOrderButton">Pick Answer Order</button>
         <button id="randomOrderButton">Random Order</button>
