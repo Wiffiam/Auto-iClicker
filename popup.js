@@ -4,12 +4,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const orderInputSection = document.getElementById('orderInputSection');
     const powerSwitch = document.getElementById('powerSwitch');
 
-    pickOrderButton.addEventListener('click', function() {
-        if (orderInputSection.style.display === 'block') {
-            orderInputSection.style.display = 'none';
-        } else {
+    orderInputSection.style.display = 'none';
+
+    displayNextAnswers();
+
+    chrome.storage.local.get(['multipleChoiceOrder', 'numericOrder', 'shortAnswerOrder', 'selectAllOrder', 'orderInputSectionVisible'], function(result) {
+        if (result.orderInputSectionVisible) {
             orderInputSection.style.display = 'block';
         }
+        document.getElementById('multipleChoiceOrderInput').value = result.multipleChoiceOrder ? result.multipleChoiceOrder.join(',') : '';
+        document.getElementById('numericOrderInput').value = result.numericOrder ? result.numericOrder.join(',') : '';
+        document.getElementById('shortAnswerInput').value = result.shortAnswerOrder ? result.shortAnswerOrder.join(',') : '';
+        document.getElementById('selectAllAnswerInput').value = result.selectAllOrder ? result.selectAllOrder.join(',') : '';
+    });
+
+    chrome.storage.local.get('orderInputSectionVisible', function(result) {
+        if (result.orderInputSectionVisible) {
+            orderInputSection.style.display = 'block';
+        } else {
+            orderInputSection.style.display = 'none';
+        }
+    });
+    
+    pickOrderButton.addEventListener('click', function() {
+        const isVisible = orderInputSection.style.display === 'block';
+        orderInputSection.style.display = isVisible ? 'none' : 'block';
+        chrome.storage.local.set({ 'orderInputSectionVisible': !isVisible });
     });
 
     randomOrderButton.addEventListener('click', function() {
@@ -50,6 +70,30 @@ document.addEventListener('DOMContentLoaded', function() {
     saveButton.addEventListener('click', saveAnswerOrder);
 });
 
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.command === 'updateAnswerOrder') {
+        displayNextAnswers();
+        sendResponse({ farewell: 'Answer order updated' });
+    }
+    return true;
+});
+
+function displayNextAnswers() {
+    chrome.storage.local.get(['multipleChoiceOrder', 'questionIndexMC', 'numericOrder', 'questionIndexNumeric', 'shortAnswerOrder', 'questionIndexShort', 'selectAllOrder', 'questionIndexSelectAll'], function(result) {
+        document.getElementById('nextMCAnswer').textContent = getNextAnswer(result.multipleChoiceOrder, result.questionIndexMC);
+        document.getElementById('nextNumericAnswer').textContent = getNextAnswer(result.numericOrder, result.questionIndexNumeric);
+        document.getElementById('nextShortAnswer').textContent = getNextAnswer(result.shortAnswerOrder, result.questionIndexShort);
+        document.getElementById('nextSelectAllAnswer').textContent = getNextAnswer(result.selectAllOrder, result.questionIndexSelectAll);
+    });
+}
+
+function getNextAnswer(order, index) {
+    if (!order || order.length === 0) {
+        return 'Random';
+    }
+    return order[index % order.length] || 'Random';
+}
+
 function saveAnswerOrder() {
     const answerOrderMC = getAnswerOrder('multipleChoiceOrderInput', ['a', 'b', 'c', 'd']);
     const answerOrderNumeric = getAnswerOrder('numericOrderInput', [1, 2, 3]);
@@ -81,6 +125,7 @@ function saveAnswerOrder() {
     });
     // Assuming showNotification is a function you've defined to display notifications to the user
     showNotification('Answer order saved successfully', 'success');
+    displayNextAnswers();
 }
 
 function getAnswerOrder(inputId, defaultOrder) {

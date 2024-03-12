@@ -177,6 +177,11 @@ function initializeContentScript() {
             console.log("new events detected");
             if (node.querySelector('.multiple-choice-buttons, .status-text-container, .numeric-answer-container')) {
               handleQuestion();
+              setTimeout(function() {
+                chrome.runtime.sendMessage({ command: "updateAnswerOrder" }, function(response) {;
+                  console.log(response.farewell);
+                });
+              }, 500);
             } else if (joinClassPopup()) {
               joinClass();
             } else {

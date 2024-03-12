@@ -3,3 +3,5 @@
 - Email notification OR app notification when a question is detected???
 - Track number of correct/incorrect answers
 - Eliminate bugs when switching tabs and enabling/disabling the extension
+- Configurable delay for different questions (e.g. 2000ms for short answer, 500ms for MC)
+- Bugs: sometimes will incorrectly detect MC questions which causes the index to go forward

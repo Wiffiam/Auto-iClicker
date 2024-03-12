@@ -57,6 +57,10 @@ input[type="text"] {
     width: 80px;
 }
 
+#nextAnswersSection {
+    display: block;
+}
+
 .notification {
     position: fixed;
     top: 10px;
